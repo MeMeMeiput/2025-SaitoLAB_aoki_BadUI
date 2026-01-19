@@ -304,13 +304,77 @@ footer {
     border-radius: 8px;
     margin-bottom: 8px;
 }
-.qty-controls button {
-    width: 35px; height: 35px;
-    border: 1px solid #666; background: white;
-    border-radius: 50%; font-weight: bold;
-}
-.qty-val { margin: 0 15px; font-weight: bold; min-width: 20px; display: inline-block; text-align: center; }
 
+/* --- 1. 基本形（共通設定） --- */
+.btn-minus, .btn-plus {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;      /* 潰れ防止 */
+    color: #fff !important; /* 文言どおり白文字を強制 */
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* 2. 色の設定 */
+.btn-minus { background-color: #0000ff !important; } /* 青 */
+.btn-plus  { background-color: #ff0000 !important; } /* 赤 */
+
+/* 3. サイズの設定（親要素で切り替え） */
+
+/* 商品ヘッダー用（大きく：45px） */
+.main-qty-selector button {
+    width: 45px;
+    height: 45px;
+    font-size: 1.5em;
+}
+
+/* オプション項目用（一回り小さく：32px） */
+.qty-controls button {
+    width: 32px;
+    height: 32px;
+    font-size: 1em;
+}
+.qty-controls {
+    display: flex;       /* 横並びにする */
+    align-items: center; /* 垂直方向の中央揃え */
+    gap: 0;              /* 必要に応じてボタン間の隙間を調整 */
+}
+
+.qty-val {
+    margin: 0 15px;      /* 左右の余白を確保して数字を離す */
+    font-weight: bold;
+    min-width: 20px;
+    display: inline-block;
+    text-align: center;
+}
+
+/*オプションモーダルの個数は同じにしてください表記*/
+/* 警告文の初期状態：背景色に馴染ませて存在感を消す */
+.opt-instruction {
+    font-size: 0.9em;
+    color: #ffeeee; /* 背景色と同じにして隠す */
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+    transition: color 0.2s;
+}
+/* エラー発生時のクラス：真っ赤にして揺らす */
+.error-active {
+    color: #ff0000 !important;
+    animation: shake 0.3s;
+}
+/* 威圧感を与えるためのシェイクアニメーション */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
 /* --- オプションモーダル・フッターの改修 --- */
 .opt-footer {
     padding: 15px 20px 20px; /* 余白を調整 */
@@ -346,4 +410,34 @@ footer {
 /* ボタンの横幅をある程度固定すると、配置がさらに崩れにくくなります */
 .opt-btn-nav, .opt-btn-cancel {
     min-width: 100px;
+}
+
+/* --- オプションモーダル ヘッダーのレイアウト修正 --- */
+.opt-header {
+    /* 既存の padding 等は継承されるため、レイアウト用に追加 */
+    display: flex;
+    justify-content: space-between; /* 左右に振り分け */
+    align-items: center;        /* 垂直中央揃え */
+    border-bottom: 1px solid #ddd; /* ヘッダーと中身の境界線 */
+}
+
+/* 商品名の余白とサイズを調整 */
+#opt-product-name {
+    margin: 0;
+    font-size: 1.2em; /* 商品名が長い場合に備えて少し調整 */
+    text-align: left;
+}
+
+/* 商品自体の個数セレクター（opt-item-qtyのボタンとデザインを統一） */
+.main-qty-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#opt-main-qty {
+    font-weight: bold;
+    min-width: 25px;
+    text-align: center;
+    font-size: 1.2em;
 }

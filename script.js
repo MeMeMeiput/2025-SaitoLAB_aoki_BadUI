@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// 4. メニュー描画ロジック
+// 4. メニュー描画
 // ==========================================
 function renderMenu() {
     const grid = document.getElementById('menu-grid');
@@ -166,9 +166,9 @@ function updateOptionUI() {
             <div class="opt-item-qty">
                 <span>${name}</span>
                 <div class="qty-controls">
-                    <button onclick="updateOptionQty(${currentOptStep}, '${name}', -1)">－</button>
+                    <button class="btn-minus" onclick="updateOptionQty(${currentOptStep}, '${name}', -1)">－</button>
                     <span class="qty-val">${currentVal}</span>
-                    <button onclick="updateOptionQty(${currentOptStep}, '${name}', 1)">＋</button>
+                    <button class="btn-plus" onclick="updateOptionQty(${currentOptStep}, '${name}', 1)">＋</button>
                 </div>
             </div>
         `;
@@ -186,13 +186,12 @@ function validateStep() {
     const nextBtn = document.getElementById('opt-next-btn');
     const prevBtn = document.getElementById('opt-prev-btn');
 
+    nextBtn.innerText = (currentOptStep === 2) ? "確定" : "次へ";
+
     if (totalSelected === modalMainQty) {
         nextBtn.classList.remove('disabled');
-        nextBtn.innerText = currentOptStep === 2 ? "確定" : "次へ";
     } else {
         nextBtn.classList.add('disabled');
-        const diff = modalMainQty - totalSelected;
-        nextBtn.innerText = diff > 0 ? `あと ${diff} 個選択` : `${Math.abs(diff)} 個多いです`;
     }
     prevBtn.classList.toggle('disabled', currentOptStep === 1);
 }
@@ -201,7 +200,10 @@ window.changeStep = function(val) {
     const currentStepOptions = optStepData[currentOptStep];
     const totalSelected = Object.values(currentStepOptions).reduce((a, b) => a + b, 0);
 
-    if (val > 0 && totalSelected !== modalMainQty) return;
+    if (val > 0 && totalSelected !== modalMainQty) {
+        showErrorFeedback();
+        return;
+    }
     if (currentOptStep === 2 && val > 0) {
         confirmAddToCartWithQty();
         return;
@@ -210,12 +212,12 @@ window.changeStep = function(val) {
     updateOptionUI();
 };
 
-function confirmAddToCartWithQty() {
-    for(let i=0; i<modalMainQty; i++) {
-        cart.push({ ...selectedProduct });
-    }
-    updateCartCount();
-    closeOptionModal();
+function showErrorFeedback() {
+    const instruction = document.querySelector('.opt-instruction');
+    instruction.classList.add('error-active');
+    setTimeout(() => {
+        instruction.classList.remove('error-active');
+    }, 1500);
 }
 
 window.closeOptionModal = () => document.getElementById('option-modal').style.display = 'none';
@@ -224,25 +226,22 @@ window.closeOptionModal = () => document.getElementById('option-modal').style.di
 // 6. カート・注文履歴
 // ==========================================
 function updateCartCount() {
-    document.getElementById('cart-count').innerText = cart.length;
+    const el = document.getElementById('cart-count');
+    if (el) el.innerText = cart.length;
 }
 
-window.clearCart = () => {
-    if(confirm("カートをすべて取り消しますか？")) {
-        cart = [];
-        updateCartCount();
+window.confirmAddToCartWithQty = function() {
+    if (!selectedProduct) return;
+    for(let i=0; i<modalMainQty; i++) {
+        cart.push({ ...selectedProduct });
     }
+    updateCartCount();
+    window.closeOptionModal();
 };
 
-document.getElementById('cart-open-btn').onclick = () => {
-    const list = document.getElementById('cart-items-list');
-    list.innerHTML = cart.map((item, i) => `
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:15px; border-bottom:1px solid #ddd; background:white;">
-            <span>${item.name}</span>
-            <span>${item.price}円 <button onclick="removeItem(${i})" style="margin-left:10px;">削除</button></span>
-        </div>
-    `).join('') || "<p style='text-align:center; padding:50px;'>カートに商品がありません</p>";
-    document.getElementById('cart-modal').style.display = 'block';
+window.clearCart = () => {
+        cart = [];
+        updateCartCount();
 };
 
 window.removeItem = (i) => {
@@ -251,27 +250,52 @@ window.removeItem = (i) => {
     document.getElementById('cart-open-btn').click();
 };
 
-document.getElementById('order-confirm-btn').onclick = () => {
-    if(!cart.length) return;
-    alert("注文を受け付けました。");
-    orderHistory.push(...cart);
-    cart = [];
-    updateCartCount();
-    document.getElementById('cart-modal').style.display = 'none';
-};
-
-document.getElementById('history-btn').onclick = () => {
-    const list = document.getElementById('history-items-list');
-    list.innerHTML = orderHistory.map(item => `
-        <div style="padding:15px; border-bottom:1px solid #eee; background:white;">${item.name} - ${item.price}円</div>
-    `).join('') || "<p style='text-align:center; padding:30px;'>注文履歴はありません</p>";
-    document.getElementById('history-modal').style.display = 'block';
-};
-
-window.closeHistoryModal = () => document.getElementById('history-modal').style.display = 'none';
-
 function setupEventListeners() {
-    document.getElementById('cart-close-btn').onclick = () => {
-        document.getElementById('cart-modal').style.display = 'none';
-    };
+    // カートを閉じる
+    const cartClose = document.getElementById('cart-close-btn');
+    if (cartClose) cartClose.onclick = () => document.getElementById('cart-modal').style.display = 'none';
+
+    // 「注文」ボタン（カートを開く）
+    const cartOpen = document.getElementById('cart-open-btn');
+    if (cartOpen) {
+        cartOpen.onclick = () => {
+            const list = document.getElementById('cart-items-list');
+            list.innerHTML = cart.map((item, i) => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:15px; border-bottom:1px solid #ddd; background:white;">
+                    <span>${item.name}</span>
+                    <span>${item.price}円 <button onclick="removeItem(${i})" style="margin-left:10px;">削除</button></span>
+                </div>
+            `).join('') || "<p style='text-align:center; padding:50px;'>カートに商品がありません</p>";
+            document.getElementById('cart-modal').style.display = 'block';
+        };
+    }
+
+    // 確定ボタン（お会計）
+    const checkoutBtn = document.getElementById('checkout-btn');
+    if (checkoutBtn) checkoutBtn.onclick = () => alert("レジへお越しください。");
+
+    // 履歴ボタン
+    const historyBtn = document.getElementById('history-btn');
+    if (historyBtn) {
+        historyBtn.onclick = () => {
+            const list = document.getElementById('history-items-list');
+            list.innerHTML = orderHistory.map(item => `
+                <div style="padding:15px; border-bottom:1px solid #eee; background:white;">${item.name} - ${item.price}円</div>
+            `).join('') || "<p style='text-align:center; padding:30px;'>注文履歴はありません</p>";
+            document.getElementById('history-modal').style.display = 'block';
+        };
+    }
+
+    // 注文内容の確定ボタン（カートモーダル内）
+    const orderConfirmBtn = document.getElementById('order-confirm-btn');
+    if (orderConfirmBtn) {
+        orderConfirmBtn.onclick = () => {
+            if(!cart.length) return;
+            alert("注文を受け付けました。");
+            orderHistory.push(...cart);
+            cart = [];
+            updateCartCount();
+            document.getElementById('cart-modal').style.display = 'none';
+        };
+    }
 }
