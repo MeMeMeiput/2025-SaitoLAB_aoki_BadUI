@@ -1,0 +1,85 @@
+<!--配置順：ヘッダー（カテゴリー） → メイン（商品）/サイド（操作） → モーダル群（オプション・カート・履歴）-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>飲食店オーダーシステム デモ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <div class="category-top">
+        <div class="category-item" onclick="changeMainCategory('期間限定スイーツ', this)">期間限定スイーツ</div>
+        <div class="category-item active" onclick="changeMainCategory('ドリンク', this)">ドリンク</div>
+        <div class="category-item" onclick="changeMainCategory('軽食', this)">軽食</div>
+        <div class="category-item" onclick="changeMainCategory('デザート', this)">デザート</div>
+        <div class="category-item" onclick="changeMainCategory('モーニング', this)">モーニング</div>
+    </div>
+    <div class="category-sub">
+        </div>
+</header>
+
+<div class="container">
+    <main>
+        <div style="position:absolute; left:0; top:50%; font-size:3em;">＜</div>
+        <div id="menu-grid"></div>
+        <div style="position:absolute; right:0; top:50%; font-size:3em;">＞</div>
+    </main>
+
+    <aside>
+        <button class="side-btn">ご案内</button>
+        <button class="side-btn">日本語<br>Language</button>
+        <button class="side-btn">お会計</button>
+        <button class="side-btn">りれき</button> </aside>
+</div>
+
+<footer>
+    <button class="btn-cancel">取り消し</button>
+    <div class="order-info">注文 <span>0</span> 個</div>
+    <button class="btn-order-confirm">注文</button>
+</footer>
+
+<div id="option-modal" class="opt-modal">
+    <div class="opt-content">
+        <h2 id="opt-product-name">商品名</h2>
+        <div id="opt-list-container" class="opt-list"></div>
+        <div class="opt-footer">
+            <button class="opt-btn-cancel" onclick="closeOptionModal()">キャンセル</button>
+            <button class="opt-btn-add" id="opt-add-to-cart-btn">カートに追加</button>
+        </div>
+    </div>
+</div>
+
+<div id="cart-modal" class="modal">
+    <div class="modal-content" style="display: flex; flex-direction: column; height: 100vh; position: relative;">
+        <span class="close-btn" id="cart-close-btn">&times;</span>
+        <div style="flex-shrink: 0; padding-top: 10px;">
+            <h1 style="margin: 0;">注文内容の確認</h1>
+            <p style="margin: 10px 0; font-size: 0.9em; color: #666;">下記の内容でよろしければ注文を確定してください</p>
+        </div>
+        <div id="cart-items-list"></div>
+        <div class="cart-footer">
+            <button id="order-confirm-btn" class="order-submit">注文を確定する</button>
+        </div>
+    </div>
+</div>
+
+<div id="history-modal" class="modal">
+    <div class="modal-content" style="display: flex; flex-direction: column; height: 100vh; position: relative;">
+        <span class="close-btn" id="history-close-btn" onclick="closeHistoryModal()">&times;</span>
+        <div style="flex-shrink: 0; padding-top: 10px;">
+            <h1 style="margin: 0;">注文履歴</h1>
+            <p style="margin: 10px 0; font-size: 0.9em; color: #666;">これまでに注文した商品の一覧です</p>
+        </div>
+        <div id="history-items-list"></div>
+        <div class="cart-footer">
+            <button class="order-submit" onclick="closeHistoryModal()" style="background: #555;">閉じる</button>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

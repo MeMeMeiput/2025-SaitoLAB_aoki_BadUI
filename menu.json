@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "name": "ブレンドコーヒー",
+        "price": 500,
+        "image": "images/ブレンドコーヒー.png",
+        "options": [
+            {"name": "砂糖", "price": 0},
+            {"name": "ミルク", "price": 0},
+            {"name": "ホイップ追加", "price": 100}
+        ]
+    },
+    {
+        "id": 2,
+        "name": "アメリカーノ",
+        "price": 600,
+        "image": "images/アメリカーノ.png",
+        "options": [
+            {"name": "濃いめ", "price": 0},
+            {"name": "薄め", "price": 0}
+        ]
+    }
+]

@@ -1,0 +1,155 @@
+/* --- Bad UI 用設定 --- */
+:root {
+    --bad-green-light: #99cc33; /* カテゴリーの薄い緑 */
+    --bad-green-dark: #33cc00;  /* 選択中の濃い緑 */
+    --bad-bg: #e6e2da;          /* 背景の少しくすんだ色 */
+    --bad-header-height: 110px;
+}
+
+body {
+    margin: 0;
+    background-color: var(--bad-bg);
+    font-family: "MS PGothic", "Hiragino Kaku Gothic ProN", sans-serif; /* 少し古い印象のフォント */
+}
+
+/* --- ヘッダー：左右に矢印があるタイプ --- */
+header {
+    background-color: var(--bad-green-light);
+    display: flex;
+    align-items: center;
+    height: 70px;
+    border-bottom: 2px solid #666;
+}
+
+/* 矢印を擬似的に追加 */
+header::before { content: "＜"; font-size: 2em; padding: 0 15px; color: #603000; }
+header::after { content: "＞"; font-size: 2em; padding: 0 15px; color: #603000; }
+
+.category-top {
+    flex: 1;
+    display: flex;
+    height: 100%;
+}
+
+.category-item {
+    flex: 1;
+    border-right: 1px solid #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #280508;
+    background-color: var(--bad-green-light);
+    font-size: 1.1em;
+}
+
+.category-item.active {
+    background-color: var(--bad-green-dark);
+    color: white;
+}
+
+/* --- レイアウト：サイドバーを右に --- */
+.container {
+    display: flex;
+    flex-direction: row; /* サイドバーを右に持っていくためにHTMLの順序を意識 */
+    height: calc(100vh - 150px);
+}
+
+main {
+    flex: 1;
+    padding: 10px;
+    position: relative;
+}
+
+/* 商品一覧：不規則なサイズ感を出す */
+#menu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3列にして密度を上げる */
+    gap: 10px;
+}
+
+.card {
+    background: white;
+    border: 1px solid #ccc;
+    position: relative;
+    height: 200px; /* 高さを固定して画像を無理やり合わせる */
+}
+
+/* 画像の上に情報を被せる（Badポイント） */
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-info {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    box-sizing: border-box;
+    font-size: 0.9em;
+}
+
+/* --- サイドバー：右側配置と四角いボタン --- */
+aside {
+    width: 120px;
+    background-color: var(--bad-bg);
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 15px;
+    border-left: 2px solid #ccc;
+}
+
+.side-btn {
+    background-color: white;
+    border: 2px solid #666;
+    color: #333;
+    border-radius: 8px;
+    padding: 10px 5px;
+    height: 60px;
+    font-size: 1em;
+    box-shadow: none;
+}
+
+/* --- フッター：注文確定エリア --- */
+footer {
+    height: 80px;
+    background-color: #d9d9d9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    border-top: 2px solid #999;
+}
+
+.btn-cancel {
+    background-color: #ff5555;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 1.2em;
+}
+
+.order-info {
+    font-size: 1.5em;
+}
+
+.order-info span {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.btn-order-confirm {
+    background-color: #22aa00;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 40px;
+    font-size: 1.2em;
+}
