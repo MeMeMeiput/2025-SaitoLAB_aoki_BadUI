@@ -1,29 +1,39 @@
-/* --- Bad UI 用設定 --- */
+/* --- Variables & Base --- */
 :root {
-    --bad-green-light: #99cc33; /* カテゴリーの薄い緑 */
-    --bad-green-dark: #33cc00;  /* 選択中の濃い緑 */
-    --bad-bg: #e6e2da;          /* 背景の少しくすんだ色 */
-    --bad-header-height: 110px;
+    --bad-bg: #e8e4db;
+    --bad-green-light: #99cc33;
+    --bad-green-dark: #33cc00;
+    --header-height: 70px;
+    --footer-height: 80px;
+    /* Good UI版から継承したカード設定 */
+    --card-radius: 15px;
+    --card-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 body {
     margin: 0;
+    font-family: sans-serif;
     background-color: var(--bad-bg);
-    font-family: "MS PGothic", "Hiragino Kaku Gothic ProN", sans-serif; /* 少し古い印象のフォント */
+    overflow: hidden;
+    user-select: none;
 }
 
-/* --- ヘッダー：左右に矢印があるタイプ --- */
+/* --- Header --- */
 header {
     background-color: var(--bad-green-light);
     display: flex;
     align-items: center;
-    height: 70px;
+    height: var(--header-height);
     border-bottom: 2px solid #666;
 }
 
-/* 矢印を擬似的に追加 */
-header::before { content: "＜"; font-size: 2em; padding: 0 15px; color: #603000; }
-header::after { content: "＞"; font-size: 2em; padding: 0 15px; color: #603000; }
+.header-arrow {
+    width: 60px;
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    color: #603000;
+}
 
 .category-top {
     flex: 1;
@@ -33,74 +43,114 @@ header::after { content: "＞"; font-size: 2em; padding: 0 15px; color: #603000;
 
 .category-item {
     flex: 1;
-    border-right: 1px solid #666;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    color: #280508;
+    border-right: 1px solid #666;
     background-color: var(--bad-green-light);
-    font-size: 1.1em;
+}
+/* 期間限定スイーツ（最初の要素）のみ左側にも枠線を付ける */
+.category-item:first-child {
+    border-left: 1px solid #666;
 }
 
-.category-item.active {
+/*---.category-item.active {
     background-color: var(--bad-green-dark);
     color: white;
 }
+---*/
 
-/* --- レイアウト：サイドバーを右に --- */
+/* --- Main Layout with Internal Arrows --- */
 .container {
     display: flex;
-    flex-direction: row; /* サイドバーを右に持っていくためにHTMLの順序を意識 */
-    height: calc(100vh - 150px);
+    height: calc(100vh - var(--header-height) - var(--footer-height));
 }
 
 main {
     flex: 1;
-    padding: 10px;
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0; /* 左右のパディングは矢印が担うため0に */
 }
 
-/* 商品一覧：不規則なサイズ感を出す */
+.main-layout-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center; /* 矢印を垂直中央に */
+}
+
+.main-nav-arrow {
+    width: 60px; /* 矢印の幅分、商品エリアが減る */
+    text-align: center;
+    font-size: 3.5em;
+    font-weight: bold;
+    color: #603000;
+    cursor: pointer;
+    cursor: pointer; /* 常にポインターにする */
+    transition: none; /* 反応の良さをあえて消す場合はnoneに */
+    opacity: 1; /* 基本の透明度を1に固定 */
+}
+
+.main-nav-arrow.disabled {
+    opacity: 1;         /* 無効状態でも薄くしない */
+    cursor: pointer;    /* 無効状態でもカーソルを指の形（クリック可能）に維持 */
+    color: #603000;     /* 色も変えない */
+}
+
+/* --- Menu Grid & Cards (Good UI Design) --- */
 #menu-grid {
+    flex: 1;
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3列にして密度を上げる */
-    gap: 10px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
 }
 
+/* カード自体のデザインはGood UI版を適用 */
 .card {
     background: white;
-    border: 1px solid #ccc;
-    position: relative;
-    height: 200px; /* 高さを固定して画像を無理やり合わせる */
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+    position: relative; /* Bad UIの「重なり」用 */
+    height: 190px;
 }
 
-/* 画像の上に情報を被せる（Badポイント） */
 .card img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
+/* Bad UI配置：画像の下部に情報を被せる */
 .card-info {
     position: absolute;
     bottom: 0;
     width: 100%;
     background: rgba(255, 255, 255, 0.9);
-    display: flex;
-    justify-content: space-between;
-    padding: 5px;
+    padding: 10px;
     box-sizing: border-box;
-    font-size: 0.9em;
+    text-align: center; /* Good UIパーツ */
 }
 
-/* --- サイドバー：右側配置と四角いボタン --- */
+.card-title { 
+    font-size: 1.1em; 
+    font-weight: bold; 
+}
+.card-price { 
+    font-size: 1.0em; 
+    color: #280508; 
+    margin-top: 2px;
+}
+
+/* --- Sidebar (Right side) --- */
 aside {
     width: 120px;
-    background-color: var(--bad-bg);
+    padding: 10px;
     display: flex;
     flex-direction: column;
-    padding: 10px;
     gap: 15px;
     border-left: 2px solid #ccc;
 }
@@ -108,48 +158,192 @@ aside {
 .side-btn {
     background-color: white;
     border: 2px solid #666;
-    color: #333;
-    border-radius: 8px;
-    padding: 10px 5px;
-    height: 60px;
-    font-size: 1em;
-    box-shadow: none;
+    border-radius: 10px;
+    padding: 15px 5px;
+    font-weight: bold;
+    height: 70px;
 }
 
-/* --- フッター：注文確定エリア --- */
+/* --- Footer --- */
 footer {
-    height: 80px;
+    height: var(--footer-height);
     background-color: #d9d9d9;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 0 30px;
     border-top: 2px solid #999;
 }
 
-.btn-cancel {
+.footer-cancel-btn {
     background-color: #ff5555;
     color: white;
     border: none;
     border-radius: 10px;
-    padding: 10px 20px;
-    font-size: 1.2em;
-}
-
-.order-info {
-    font-size: 1.5em;
-}
-
-.order-info span {
-    font-size: 2em;
+    padding: 12px 25px;
     font-weight: bold;
 }
 
-.btn-order-confirm {
+.footer-info { font-size: 1.5em; font-weight: bold; }
+.footer-info span { font-size: 2em; }
+
+.footer-order-btn {
     background-color: #22aa00;
     color: white;
     border: none;
     border-radius: 10px;
-    padding: 10px 40px;
+    padding: 12px 50px;
+    font-weight: bold;
     font-size: 1.2em;
+}
+
+/* Pagination text */
+.bad-pagination {
+    text-align: center;
+    padding: 5px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Modals */
+.modal, .opt-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.6);
+}
+
+/* --- カートモーダル --- */
+.modal-content, .opt-content {
+    background-color: white;
+    margin: 5vh auto;
+    width: 90%;
+    height: 80vh;
+    border-radius: 20px; /* 角丸を維持 */
+    position: relative;
+    
+    /* 重要：中身を縦並びのFlexボックスにする */
+    display: flex;
+    flex-direction: column;
+    
+    /* 重要：外枠からはみ出るものは隠す（これで角丸が守られます） */
+    overflow: hidden; 
+}
+
+/* --- 閉じるボタンの修正 --- */
+.close-btn {
+    position: absolute;
+    top: 15px;    /* 上からの距離 */
+    right: 20px;  /* 右からの距離（左に寄りすぎている場合はここを調整） */
+    
+    font-size: 35px;
+    font-weight: bold;
+    color: #666;
+    cursor: pointer;
+    z-index: 2010; /* 他の要素より上に表示 */
+    
+    /* ボタンのクリック領域を少し広げておくと、操作性は上がります（Good UI的ですが） */
+    padding: 10px;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #000;
+}
+
+/* モーダル内のヘッダー（タイトルなど） */
+.modal-content h1, .opt-header {
+    padding: 20px 20px 10px;
+    margin: 0;
+    flex-shrink: 0; /* 縮まないように固定 */
+}
+
+/* スクロールが発生するリスト部分（ここをスクロールさせる） */
+#cart-items-list, #history-items-list, .opt-list {
+    flex: 1; /* 残りのスペースをすべて使う */
+    overflow-y: auto; /* ここでスクロールを発生させる */
+    padding: 0 20px; /* 左右に余白を戻す */
+
+    /*右側に少しだけ隙間を作ることで、親の角丸を隠さないようにする */
+    margin-right: 8px;
+    
+
+}
+
+/* モーダル内のフッター（ボタンエリア） */
+.cart-footer, .opt-footer {
+    padding: 10px 20px 20px;
+    background-color: #f9f9f9; /* フッターっぽく色を変えてもOK */
+    flex-shrink: 0;
+}
+
+/* オプションモーダル　ステップ表示 */
+.step-bar {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
+}
+.step-item {
+    width: 40px; height: 30px;
+    background: #ccc;
+    clip-path: polygon(0% 0%, 85% 0%, 100% 50%, 85% 100%, 0% 100%, 15% 50%);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; color: white;
+}
+.step-item.active { background: #f39c12; }
+
+/* 個数カウンター付きオプション項目 */
+.opt-item-qty {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+.qty-controls button {
+    width: 35px; height: 35px;
+    border: 1px solid #666; background: white;
+    border-radius: 50%; font-weight: bold;
+}
+.qty-val { margin: 0 15px; font-weight: bold; min-width: 20px; display: inline-block; text-align: center; }
+
+/* --- オプションモーダル・フッターの改修 --- */
+.opt-footer {
+    padding: 15px 20px 20px; /* 余白を調整 */
+    background-color: #f9f9f9;
+    flex-shrink: 0;
+    
+    /* ボタンを左右・中央に振り分ける */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* キャンセルボタンのスタイルを追加（必要に応じて） */
+.opt-btn-cancel {
+    background-color: #ff5555; /* 取り消しに近い色 */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-weight: bold;
+    order: 2; /* 中央に配置 */
+}
+
+/* 前へボタンを左、次へボタンを右に固定 */
+#opt-prev-btn {
+    order: 1;
+}
+
+#opt-next-btn {
+    order: 3;
+}
+
+/* ボタンの横幅をある程度固定すると、配置がさらに崩れにくくなります */
+.opt-btn-nav, .opt-btn-cancel {
+    min-width: 100px;
 }
