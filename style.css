@@ -231,6 +231,81 @@ footer {
     overflow: hidden; 
 }
 
+/* --- カート内の商品レイアウト --- */
+.cart-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-main-qty {
+    width: 30px;
+    text-align: right;
+    font-weight: bold;
+    color: #333;
+    /* オプションの個数（.opt-qty）と同じ余白を設定して縦のラインを揃える */
+    margin-right: 50px; 
+}
+
+.cart-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* 上揃え */
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    background: white;
+}
+
+.cart-item-info {
+    flex: 1;
+}
+
+.cart-item-name {
+    flex: 1;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+/* 商品名の下のオプション */
+.cart-option-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 1.1em;
+    color: #555;
+    margin-bottom: 2px;
+}
+.opt-name {
+    flex: 1; /* 名前を左側に寄せる */
+}
+.opt-qty {
+    width: 30px;
+    text-align: right;
+    font-weight: bold;
+    color: #333;
+    margin-right: 50px; /* 右側の価格・削除ボタンと重ならないように余白 */
+}
+
+.cart-item-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.cart-item-price {
+    font-weight: bold;
+}
+
+.cart-remove-btn {
+    background: #e1e1e1;
+    color: #2b2b2b;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 /* --- 閉じるボタンの修正 --- */
 .close-btn {
     position: absolute;
@@ -267,15 +342,39 @@ footer {
 
     /*右側に少しだけ隙間を作ることで、親の角丸を隠さないようにする */
     margin-right: 8px;
-    
-
 }
 
 /* モーダル内のフッター（ボタンエリア） */
 .cart-footer, .opt-footer {
     padding: 10px 20px 20px;
-    background-color: #f9f9f9; /* フッターっぽく色を変えてもOK */
-    flex-shrink: 0;
+    /*background-color: #f9f9f9;  フッターっぽく色を変えてもOK */
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px; /* ボタン同士の隙間 */
+}
+
+/* --- ボタンの共通デザイン --- */
+#order-confirm-btn, 
+#order-continue-btn {
+    font-size: 1.2em;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    flex: 1; /* Bad UI演出：ボタンの幅を均等に広げて、押し間違えやすくする */
+    max-width: 200px;
+}
+
+/* 確定ボタン：赤 */
+#order-confirm-btn {
+    background-color: #ff0000;
+}
+
+/* 続けて入力するボタン：オレンジ（色違い） */
+#order-continue-btn {
+    background-color: #ff9900;
 }
 
 /* オプションモーダル　ステップ表示 */
@@ -356,7 +455,7 @@ footer {
 /* 警告文の初期状態：背景色に馴染ませて存在感を消す */
 .opt-instruction {
     font-size: 0.9em;
-    color: #ffeeee; /* 背景色と同じにして隠す */
+    color: #ffffff; /* 背景色と同じにして隠す */
     font-weight: bold;
     margin-bottom: 10px;
     text-align: center;
@@ -441,3 +540,53 @@ footer {
     text-align: center;
     font-size: 1.2em;
 }
+
+/* --- 案内モーダル専用スタイル --- */
+.guide-modal-content {
+    height: auto !important;
+    max-height: 70vh;
+}
+
+.guide-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2列にする */
+    gap: 15px;
+    padding: 20px;
+}
+
+.guide-item-btn {
+    background: white;
+    border: 2px solid #666;
+    border-radius: 12px;
+    padding: 20px 10px;
+    font-size: 1.1em;
+    font-weight: bold;
+    height: 120px;
+    cursor: pointer;
+    box-shadow: 2px 2px 0 #999;
+}
+
+/* 3つ目の「アレルギーについて」だけ左側に寄せて、右側を空白にする（スケッチの再現） */
+.guide-item-btn:last-child {
+    grid-column: 1 / 2;
+}
+
+/* --- クリック遅延用のオーバーレイ --- 
+.loading-overlay {
+    display: none; /* 通常は隠しておく
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(255, 255, 255, 0.2); /* わずかに白くして「固まった」感を出す 
+    z-index: 9999; /* 何よりも上に表示 
+    cursor: wait;  /* カーソルを「砂時計」にする 
+}
+
+.loading-msg {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    color: #666;
+    font-size: 0.8em;
+}*/

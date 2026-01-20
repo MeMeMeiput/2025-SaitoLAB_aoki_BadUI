@@ -34,7 +34,7 @@
     </main>
 
     <aside>
-        <button class="side-btn">ご案内</button>
+        <button class="side-btn" id="guide-btn">ご案内</button>
         <button class="side-btn">日本語<br>Langage</button>
         <button class="side-btn" id="checkout-btn">お会計</button>
         <button class="side-btn" id="history-btn">りれき</button>
@@ -85,22 +85,46 @@
         <h1>注文内容</h1>
         <div id="cart-items-list"></div>
         <div class="cart-footer">
+            <button id="order-continue-btn" class="order-submit">続けて入力する</button>
             <button id="order-confirm-btn" class="order-submit">注文を確定する</button>
         </div>
     </div>
 </div>
 
+<!--りれきモーダル-->
 <div id="history-modal" class="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeHistoryModal()">&times;</span>
         <h1>注文履歴</h1>
         <div id="history-items-list"></div>
-        <div class="cart-footer">
+        <!--<div class="cart-footer">
             <button class="order-submit" onclick="closeHistoryModal()" style="background: #555;">閉じる</button>
+        </div><-->
+    </div>
+</div>
+
+<!--ご案内モーダル-->
+<div id="guide-modal" class="modal">
+    <div class="modal-content guide-modal-content">
+        <span class="close-btn" onclick="closeGuideModal()">&times;</span>
+        <h1>ご案内</h1>
+        
+        <div class="guide-grid">
+            <button class="guide-item-btn" onclick="alert('ただいま混み合っております。そのままお待ちください。')">店員を呼ぶ</button>
+            <button class="guide-item-btn" onclick="alert('よくある質問：注文ができません。\n回答：個数を正確に合わせてください。')">Q & A</button>
+            <button class="guide-item-btn" onclick="alert('アレルギー情報：各商品詳細をご確認ください。')">アレルギーについて</button>
         </div>
+
+        <!--<div class="cart-footer">
+            <button class="order-submit" onclick="closeGuideModal()" style="background: #555;">閉じる</button>
+        </div>-->
     </div>
 </div>
 
 <script src="script.js"></script>
+
+<div id="loading-overlay" class="loading-overlay">
+    <div class="loading-msg">処理中...</div>
+</div>
 </body>
 </html>
