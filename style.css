@@ -571,6 +571,35 @@ footer {
     grid-column: 1 / 2;
 }
 
+/* iPad Pro等のタブレット端末向けの調整 */
+@media screen and (min-width: 768px) and (max-width: 1366px) {
+    /* 1. 動的ビューポート高さ(dvh)を使用して、フッターを画面内に強制的に収める */
+    .container {
+        height: calc(100dvh - var(--header-height) - var(--footer-height));
+    }
+
+    /* 2. メインコンテンツエリア上下の余白をゼロにする */
+    main {
+        padding: 0; 
+    }
+
+    /* 3. 商品グリッド内のカード同士の隙間を狭くする */
+    #menu-grid {
+        gap: 8px; /* 12pxから8pxへ */
+    }
+
+    /* 4. ページネーション（1/2）の上下パディングを詰める */
+    .bad-pagination {
+        padding: 2px 0;
+    }
+
+    /* 5. サイドバーのボタン間の隙間も詰めて、縦方向の空間を確保する */
+    aside {
+        gap: 10px; /* 15pxから10pxへ */
+        padding: 5px 10px;
+    }
+}
+
 /* --- クリック遅延用のオーバーレイ --- 
 .loading-overlay {
     display: none; /* 通常は隠しておく
