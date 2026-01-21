@@ -74,7 +74,7 @@ function renderMenu() {
             </div>
         </div>
     `).join('');
-    updatePaginationUI(filtered.length);
+    //updatePaginationUI(filtered.length); //ページの愛数を表示しない
 }
 
 window.changeMainCategory = function(mainCat, element) {
