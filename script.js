@@ -241,7 +241,28 @@ function setupEventListeners() {
 
     wrap('history-btn', 1500, () => {
         const list = document.getElementById('history-items-list');
-        list.innerHTML = orderHistory.map(item => `<div class="cart-item-row">...</div>`).join('') || "履歴なし";
+        // mapの中身を、カートの表示と同じように詳細を表示する形式に修正します
+        list.innerHTML = orderHistory.map(item => `
+            <div class="cart-item-row">
+                <div class="cart-item-info">
+                    <div class="cart-item-header">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-main-qty">1</div>
+                    </div>
+                    <div class="cart-options-container">
+                        ${item.displayOptions.map(o => `
+                            <div class="cart-option-item">
+                                <span class="opt-name">${o.name}</span>
+                                <span class="opt-qty">1</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="cart-item-right">
+                    <span class="cart-item-price">${item.price}円</span>
+                </div>
+            </div>
+        `).join('') || "<p style='text-align:center; padding:50px;'>履歴なし</p>";
         document.getElementById('history-modal').style.display = 'block';
     });
 
