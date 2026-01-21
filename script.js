@@ -278,16 +278,20 @@ function setupEventListeners() {
 // ==========================================
 function applyGlobalDelay() {
     const targets = [
-        { name: 'openOption', ms: 1200 },
-        { name: 'changeStep', ms: 1000 },
-        { name: 'changeMainCategory', ms: 800 },
-        { name: 'movePage', ms: 800 },
-        { name: 'updateMainQty', ms: 500 },
-        { name: 'updateOptionQty', ms: 400 }
+        { name: 'openOption', ms: 1200 },        // 商品選択
+        { name: 'changeStep', ms: 1000 },        // モーダルの次へ/前へ
+        { name: 'changeMainCategory', ms: 800 }, // カテゴリ切り替え
+        { name: 'cycleMainCategory', ms: 800 },  // ヘッダー矢印
+        { name: 'movePage', ms: 800 },           // 商品ページめくり
+        { name: 'updateMainQty', ms: 800 },      // 数量変更
+        { name: 'updateOptionQty', ms: 1000 }     // オプション数量変更
     ];
+    
     targets.forEach(t => {
         const original = window[t.name];
-        if (original) window[t.name] = (...args) => runWithDelay(() => original(...args), t.ms);
+        if (original) {
+            window[t.name] = (...args) => runWithDelay(() => original(...args), t.ms);
+        }
     });
 }
 
